@@ -7,6 +7,7 @@ const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({
     user: null,
     token: "",
+    count: 0,
   });
 
   //default axios
@@ -20,6 +21,7 @@ const AuthProvider = ({ children }) => {
         ...auth,
         user: parseData.user,
         token: parseData.token,
+        count: 0,
       });
     }
   }, []);

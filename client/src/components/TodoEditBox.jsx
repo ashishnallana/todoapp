@@ -1,5 +1,5 @@
 import { Checkbox } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
@@ -13,6 +13,7 @@ function TodoEditBox({
   handleTodoEdit,
 }) {
   const [auth, setAuth] = useAuth();
+  const [checked, setChecked] = useState(todoData.completed);
 
   const todoDelete = async () => {
     try {
@@ -25,7 +26,11 @@ function TodoEditBox({
         }
       );
       if (res.data.success) {
-        toast.success(res.data.message);
+        // toast.success(res.data.message);
+        setAuth({
+          ...auth,
+          count: auth.count + 1,
+        });
         editBoxHandler();
       } else {
         toast.error(res.data.message);
@@ -35,9 +40,14 @@ function TodoEditBox({
     }
   };
 
+  const handleCheckboxChange = (event) => {
+    setChecked(!checked);
+    handleInputChange("completed", checked);
+  };
+
   return (
-    <div className="fixed top-0 left-0 flex justify-center items-center h-screen w-screen bg-[rgba(0,0,0,0.4)] z-[1000]">
-      <div className="bg-white p-3 rounded-md shadow-md flex flex-col space-y-3">
+    <div className="fixed top-0 left-0 flex justify-center items-center h-screen w-screen bg-[rgba(0,0,0,0.4)] backdrop-blur-sm z-[1000]">
+      <div className="bg-white p-3 rounded-md shadow-md flex flex-col space-y-7">
         <div className="flex justify-between">
           <div className="h-5 flex-1"></div>
           <CloseIcon
@@ -47,11 +57,7 @@ function TodoEditBox({
         </div>
         {/* title and completed checkbox */}
         <div className="flex items-center">
-          <Checkbox
-            checked={todoData.completed}
-            onChange={() => handleInputChange("completed", !todoData.completed)}
-            // onClick={() => handleTodoEdit(todoData)}
-          />
+          <Checkbox checked={checked} onChange={handleCheckboxChange} />
           <input
             type="text"
             placeholder="Title"
