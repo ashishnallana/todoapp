@@ -4,6 +4,8 @@ const userMiddleware = require("../middleware/authMiddleware");
 
 const router = Router();
 
+// routes starts with /user. ex => localhost:3001/user/register
+
 router.post("/register", register);
 router.post("/login", login);
 
