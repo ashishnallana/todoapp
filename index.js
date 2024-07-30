@@ -1,8 +1,9 @@
 const express = require("express");
-// const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
+const userRouter = require("./routers/userRouter");
+const todoRouter = require("./routers/todoRouter");
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -26,6 +27,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
+
+// routers
+app.use("/user", userRouter);
+app.use("/", todoRouter);
 
 app.listen(port, () => {
   console.log(`server is up and running at the port ${port}.`);
