@@ -10,8 +10,8 @@ const userMiddleware = require("../middleware/authMiddleware");
 const router = Router();
 
 router.get("/todos", userMiddleware, getTodos);
-router.post("/todos", createTodo);
-router.put("/todos/:id", userMiddleware, editTodo);
-router.delete("/todos/:id", userMiddleware, deleteTodo);
+router.post("/todos", userMiddleware, createTodo);
+router.put("/todos/:todoId", userMiddleware, editTodo);
+router.delete("/todos/:todoId", userMiddleware, deleteTodo);
 
 module.exports = router;

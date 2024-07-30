@@ -63,12 +63,12 @@ module.exports.editTodo = async (req, res) => {
     const todo = await Todo.findById(todoId);
     if (!todo) {
       return res
-        .status(404)
+        .status(200)
         .send({ success: false, message: "Todo not found" });
     }
     // Check if the user is authorized to update this todo
     if (todo.user.toString() !== req._id.toString()) {
-      return res.status(403).send({
+      return res.status(200).send({
         success: false,
         message: "User not authorized to update this todo",
       });
@@ -76,7 +76,9 @@ module.exports.editTodo = async (req, res) => {
     // Update the todo with the new values
     const updatedTodo = await Todo.findByIdAndUpdate(
       todoId,
-      { $set: { title: newTitle, description: newDesc, completed } },
+      {
+        $set: { title: newTitle, description: newDesc, completed: !completed },
+      },
       { new: true }
     );
 
