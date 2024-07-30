@@ -59,7 +59,7 @@ module.exports.createTodo = async (req, res) => {
 module.exports.editTodo = async (req, res) => {
   try {
     const { todoId } = req.params;
-    const { newTitle, newDesc } = req.body;
+    const { newTitle, newDesc, completed } = req.body;
     const todo = await Todo.findById(todoId);
     if (!todo) {
       return res
@@ -76,54 +76,13 @@ module.exports.editTodo = async (req, res) => {
     // Update the todo with the new values
     const updatedTodo = await Todo.findByIdAndUpdate(
       todoId,
-      { $set: { title: newTitle, description: newDesc } },
+      { $set: { title: newTitle, description: newDesc, completed } },
       { new: true }
     );
 
     res.status(201).send({
       success: true,
       message: "Todo edited successfully",
-      updatedTodo,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: "Something went wrong!",
-      error,
-    });
-  }
-};
-
-// function to complete or undocomplete a todo/task
-// PUT REQUEST
-module.exports.completeTodo = async (req, res) => {
-  try {
-    const { todoId } = req.params;
-    const { completed } = req.body; // completed = true or false
-    const todo = await Todo.findById(todoId);
-    if (!todo) {
-      return res
-        .status(404)
-        .send({ success: false, message: "Todo not found" });
-    }
-    // Check if the user is authorized to update this todo
-    if (todo.user.toString() !== req._id.toString()) {
-      return res.status(403).send({
-        success: false,
-        message: "User not authorized to update this todo",
-      });
-    }
-    // Update the todo
-    const updatedTodo = await Todo.findByIdAndUpdate(
-      todoId,
-      { $set: { completed } },
-      { new: true }
-    );
-
-    res.status(201).send({
-      success: true,
-      message: "Todo completed successfully",
       updatedTodo,
     });
   } catch (error) {
