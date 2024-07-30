@@ -3,9 +3,9 @@ import { truncate } from "../pages/Home";
 import EditIcon from "@mui/icons-material/Edit";
 import Checkbox from "@mui/material/Checkbox";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { useAuth } from "../context/Auth";
 import TodoEditBox from "./TodoEditBox";
+import { toast } from "react-toastify";
 
 function TodoCard({ data }) {
   const [todoData, setTodoData] = useState(data);
@@ -36,7 +36,10 @@ function TodoCard({ data }) {
         }
       );
       if (res.data.success) {
-        toast.success(res.data.message);
+        setAuth({
+          ...auth,
+          count: auth.count + 1,
+        });
         setEditBox(false);
       } else {
         toast.error(res.data.message);
@@ -47,23 +50,34 @@ function TodoCard({ data }) {
   };
 
   return (
-    <div className="m-3 shadow-md p-3 rounded-md">
-      <div className="flex justify-between">
-        <h2
-          className="font-semibold text-lg cursor-pointer"
-          onClick={() => setEditBox(true)}
-        >
-          {data.title}
-        </h2>
-        <div className="flex space-x-2 items-center">
-          <Checkbox
-            checked={todoData.completed}
-            onChange={() => handleInputChange("completed", !todoData.completed)}
-            onClick={() => handleTodoEdit(todoData)}
-          />
+    <div className="m-3 shadow-md rounded-md min-w-[300px]">
+      <div
+        className={`p-3 rounded-md ${
+          data.completed && "opacity-70 bg-[rgba(0,0,0,0.1)]"
+        }`}
+      >
+        <div className="flex justify-between items-center">
+          <h2
+            className="font-semibold text-lg cursor-pointer"
+            onClick={() => setEditBox(true)}
+          >
+            {data.title}
+          </h2>
+          <div className="flex space-x-2 items-center">
+            <Checkbox
+              checked={todoData.completed}
+              onChange={() =>
+                handleInputChange("completed", !todoData.completed)
+              }
+              onClick={() => handleTodoEdit(todoData)}
+            />
+          </div>
         </div>
+        <p className="text-sm opacity-90">{truncate(data.description)}</p>
       </div>
-      <p className="text-sm opacity-90">{truncate(data.description)}</p>
+      {/* ${
+        data.completed && "opacity-70 bg-[rgba(0,0,0,0.1)]"
+      } */}
       {editBox && (
         <TodoEditBox
           todoData={todoData}

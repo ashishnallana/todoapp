@@ -24,7 +24,10 @@ function TodoAdder() {
         }
       );
       if (res.data.success) {
-        toast.success(res.data.message);
+        setAuth({
+          ...auth,
+          count: auth.count + 1,
+        });
         setTitle("");
       } else {
         toast.error(res.data.message);

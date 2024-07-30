@@ -5,9 +5,17 @@ const { User } = require("../models/user");
 // GET REQUEST
 module.exports.getTodos = async (req, res) => {
   try {
-    const todos = await User.findById(req._id)
-      .populate("todos")
-      .sort({ createdAt: -1 });
+    const user = await User.findById(req._id).populate("todos");
+
+    let todos = user.todos;
+
+    // Sort todos by createdAt time and prioritize todo's which are not complete
+    todos.sort((a, b) => {
+      if (a.completed === b.completed) {
+        return b.createdAt - a.createdAt;
+      }
+      return a.completed ? 1 : -1;
+    });
 
     res.status(200).send({
       success: true,
