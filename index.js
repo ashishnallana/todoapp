@@ -14,7 +14,7 @@ require("./db/connection");
 // cors
 app.use(
   cors({
-    origin: ["https://todoapp-gold-mu.vercel.app"],
+    origin: "https://todoapp-gold-mu.vercel.app",
     methods: ["POST", "GET", "PUT", "DELETE"],
     credentials: true,
   })
