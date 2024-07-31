@@ -12,19 +12,13 @@ const port = process.env.PORT || 3001;
 require("./db/connection");
 
 // cors
-const allowedOrigins = [process.env.CLIENT_ORIGIN]; // we can add more client domains if needed
-
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (allowedOrigins.includes(origin) || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-};
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: [process.env.CLIENT_ORIGIN],
+    methods: ["POST", "GET", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
