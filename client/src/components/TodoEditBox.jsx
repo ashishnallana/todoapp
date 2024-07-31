@@ -1,5 +1,5 @@
 import { Checkbox } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
@@ -14,6 +14,10 @@ function TodoEditBox({
 }) {
   const [auth, setAuth] = useAuth();
   const [checked, setChecked] = useState(todoData.completed);
+
+  useEffect(() => {
+    setChecked(todoData.completed);
+  }, [todoData.completed]);
 
   const todoDelete = async () => {
     try {
@@ -41,8 +45,9 @@ function TodoEditBox({
   };
 
   const handleCheckboxChange = (event) => {
-    setChecked(!checked);
-    handleInputChange("completed", checked);
+    const isChecked = event.target.checked;
+    setChecked(isChecked);
+    // handleInputChange("completed", isChecked);
   };
 
   return (
@@ -80,7 +85,10 @@ function TodoEditBox({
         {/* edit and delete btns */}
         <div className="flex space-x-2">
           <button
-            onClick={() => handleTodoEdit(todoData)}
+            onClick={() => {
+              handleInputChange("completed", checked);
+              handleTodoEdit(todoData);
+            }}
             className="flex flex-1 rounded-full justify-center items-center bg-blue-400 transition-all hover:bg-blue-500 text-white font-bold p-2 tracking-wide"
           >
             Edit
